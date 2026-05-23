@@ -1,0 +1,21 @@
+name: Regression Guard
+on:
+  pull_request:
+    paths:
+      - 'prompts/**'
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: andrewgalli411-sudo/regression-guard-action@v0.1.0
+        with:
+          api-key: ${{ secrets.REGRESSION_GUARD_API_KEY }}
+          prompts: './prompts/*.md'
+          test-cases: |
+            [
+              {"input": "What are your business hours?", "expected_contains": "hours"},
+              {"input": "How do I reset my password?", "expected_contains": "reset"},
+              {"input": "Do you ship internationally?", "expected_contains": "ship"}
+            ]
+          threshold: '80'
